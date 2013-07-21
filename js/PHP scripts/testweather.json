@@ -1,0 +1,18 @@
+{ "data": 
+	{ "current_condition": 
+		[ {"cloudcover": "100", "humidity": "94", "observation_time": "01:27 PM", "precipMM": "0.0", "pressure": "1020", "temp_C": "19", "temp_F": "66", "visibility": "2", "weatherCode": "143", "weatherDesc": 
+			[ {"value": "Mist" } ], "weatherIconUrl": 
+			[ {"value": "http:\/\/www.worldweatheronline.com\/images\/wsymbols01_png_64\/wsymbol_0006_mist.png" } ], "winddir16Point": "N", "winddirDegree": "0", "windspeedKmph": "0", "windspeedMiles": "0" } ], 
+	"request": [ {"query": "30350", "type": "Zipcode" } ], 
+	"weather": [ {"date": "2013-05-20", "precipMM": "4.2", "tempMaxC": "30", "tempMaxF": "86", "tempMinC": "19", "tempMinF": "67", "weatherCode": "113", 
+		"weatherDesc": [ {"value": "Sunny" } ], 
+		"weatherIconUrl": [ {"value": "http:\/\/www.worldweatheronline.com\/images\/wsymbols01_png_64\/wsymbol_0001_sunny.png" } ], 
+		"winddir16Point": "SSW", "winddirDegree": "200", "winddirection": "SSW", "windspeedKmph": "9", "windspeedMiles": "6" },
+	 {"date": "2013-05-21", "precipMM": "3.2", "tempMaxC": "29", "tempMaxF": "85", "tempMinC": "19", "tempMinF": "67", "weatherCode": "200", "weatherDesc": [ {"value": "Thundery outbreaks in nearby" } ], "weatherIconUrl": [ {"value": "http:\/\/www.worldweatheronline.com\/images\/wsymbols01_png_64\/wsymbol_0016_thundery_showers.png" } ], "winddir16Point": "W", "winddirDegree": "260", "winddirection": "W", "windspeedKmph": "11", "windspeedMiles": "7" }, 
+	 {"date": "2013-05-22", "precipMM": "11.7", "tempMaxC": "27", "tempMaxF": "81", "tempMinC": "17", "tempMinF": "63", "weatherCode": "356", "weatherDesc": [ {"value": "Moderate or heavy rain shower" } ], "weatherIconUrl": [ {"value": "http:\/\/www.worldweatheronline.com\/images\/wsymbols01_png_64\/wsymbol_0010_heavy_rain_showers.png" } ], "winddir16Point": "SW", "winddirDegree": "230", "winddirection": "SW", "windspeedKmph": "9", "windspeedMiles": "6" }, 
+	 {"date": "2013-05-23", "precipMM": "4.0", "tempMaxC": "29", "tempMaxF": "85", "tempMinC": "18", "tempMinF": "65", "weatherCode": "113", "weatherDesc": [ {"value": "Sunny" } ], "weatherIconUrl": [ {"value": "http:\/\/www.worldweatheronline.com\/images\/wsymbols01_png_64\/wsymbol_0001_sunny.png" } ], "winddir16Point": "W", "winddirDegree": "272", "winddirection": "W", "windspeedKmph": "8", "windspeedMiles": "5" }, 
+	 {"date": "2013-05-24", "precipMM": "0.4", "tempMaxC": "28", "tempMaxF": "83", "tempMinC": "17", "tempMinF": "63", "weatherCode": "113", "weatherDesc": [ {"value": "Sunny" } ], "weatherIconUrl": [ {"value": "http:\/\/www.worldweatheronline.com\/images\/wsymbols01_png_64\/wsymbol_0001_sunny.png" } ], "winddir16Point": "WNW", "winddirDegree": "299", "winddirection": "WNW", "windspeedKmph": "19", "windspeedMiles": "12" } ] }}
+	 
+
+
+	 // search for current condition and dates
