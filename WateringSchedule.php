@@ -2,9 +2,9 @@
 
 include_once 'dbc.php';
 
-//$deviceCode = (is_null($_GET['deviceCode']) ? 'null' : $_GET['deviceCode']);
+$deviceCode = (is_null($_GET['deviceCode']) ? 'null' : $_GET['deviceCode']);
 
-$deviceCode = '234234';
+
 //$timezone = date_default_timezone_get();
 //echo "The current server timezone is: " . $timezone;
 
