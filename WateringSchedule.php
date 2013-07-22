@@ -2,9 +2,9 @@
 
 include_once 'dbc.php';
 
-$deviceCode = (is_null($_GET['deviceCode']) ? 'null' : $_GET['deviceCode']);
+//$deviceCode = (is_null($_GET['deviceCode']) ? 'null' : $_GET['deviceCode']);
 
-
+$deviceCode = '234234';
 //$timezone = date_default_timezone_get();
 //echo "The current server timezone is: " . $timezone;
 
@@ -14,6 +14,11 @@ $sql_query = "SELECT * FROM optilawn_main.ZoneWateringSchedule WHERE  StartTime 
 //echo $sql_query;
 $results = mysql_query($sql_query,$link) or die(mysql_error());
 
+$sql_reset_query = "select result from optilawn_main.reset_time where deviceID = $deviceCode and now() between Tstart and Tend";
+$resetquery = mysql_query($sql_reset_query,$link) or die(mysql_error());
+
+$array = mysql_fetch_array($resetquery);
+
 if(mysql_num_rows($results) > 0){
 	$row = mysql_fetch_array($results);
 	$zone = $row['ZoneNumber'];
@@ -22,6 +27,9 @@ if(mysql_num_rows($results) > 0){
 	$sql_insertquery = "Insert into Device_Requests (DeviceID,response) Values($deviceCode,'$insert')";
 	mysql_query($sql_insertquery,$link) or die(mysql_error());
 	}
+	elseif($array['result']){
+		echo "{0,9}"; /// to reset {0,9}
+	}
 	else{
 		echo "{0,0}"; /// to reset {0,9}
 		$insert = "0,0";
@@ -29,6 +37,10 @@ if(mysql_num_rows($results) > 0){
 		mysql_query($sql_insertquery,$link) or die(mysql_error());
 	}
 
+
+
+
+	/*
 $final = array();
 $num = 1;
 while($row = mysql_fetch_array($results)) {
@@ -53,7 +65,7 @@ while($row = mysql_fetch_array($results)) {
 		);
 		$num++;
 }
-
+*/
 //echo json_encode($final);
 //echo "{2,1}"; // {zone,on/off}
 
