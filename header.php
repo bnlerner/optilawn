@@ -1,5 +1,5 @@
 <?php 
-include 'dbc.php';
+include_once 'dbc.php';
 
 
 $err = array();

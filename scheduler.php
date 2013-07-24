@@ -12,10 +12,10 @@ $NumberOfZones = 5;
 // query database
 $weather = getWeather($zipCode);
 
-$sqlDelWeather = "DELETE  FROM `WeatherData` WHERE `date` > curdate() and `precipitationmm` IS NOT NULL AND `zipcode` = '$zipCode'";
+$sqlDelWeather = "DELETE  FROM `WeatherData` WHERE `date` >= curdate() AND `zipcode` = '$zipCode'";
 mysql_query($sqlDelWeather,$link) or die(mysql_error());
 //var_dump($weather->data);
-
+/*
 foreach($weather->data->current_condition as $curobj) {
 	$Curcloudcover = $curobj->cloudcover;
 	$CurHumidity = $curobj->humidity;
@@ -25,7 +25,7 @@ foreach($weather->data->current_condition as $curobj) {
 }
 $sqlCurWeather = "INSERT INTO `WeatherData` (`id`, `Date_Time_Stamp`, `zipcode`, `curcloudcover`, `curhumidity`, `curpressure`, `curtemp`, `curweathercode`, `precipitationmm`, `date`, `tempmaxF`, `tempminF`, `weathercode`) VALUES (NULL, CURRENT_TIMESTAMP, $zipCode, $Curcloudcover, $CurHumidity, $CurPressure, $CurTempF, $CurWeatherCode, NULL, CURDATE(), NULL, NULL, NULL)";
 mysql_query($sqlCurWeather,$link) or die(mysql_error());
-
+*/
 foreach($weather->data->weather as $obj) {
 	$Date = $obj->date;
 	$precipitation = $obj->precipMM;
@@ -33,6 +33,20 @@ foreach($weather->data->weather as $obj) {
 	$TempMinF = $obj->tempMinF;
 	$WCode = $obj->weatherCode;
 	$sqlWeather = "INSERT INTO `WeatherData` (`id`, `Date_Time_Stamp`, `zipcode`, `curcloudcover`, `curhumidity`, `curpressure`, `curtemp`, `curweathercode`, `precipitationmm`, `date`, `tempmaxF`, `tempminF`, `weathercode`) VALUES (NULL, CURRENT_TIMESTAMP, $zipCode, NULL, NULL, NULL, NULL, NULL, $precipitation, '$Date', $TempMaxF, $TempMinF, $WCode)";
+	mysql_query($sqlWeather,$link) or die(mysql_error());
+}
+
+
+// past weather
+$day = '20130722';
+$date = '2013-07-23';
+$location = 'Mableton';
+$state = 'Ga';
+$weather = getPastWeather($location,$state,$day);
+foreach($weather->history->dailysummary as $curobj){
+	$rainIN = $curobj->precipi;
+	$rainMM = $curobj->precipm;
+	$sqlWeather = "INSERT INTO `WeatherData` (`id`, `Date_Time_Stamp`, `zipcode`, `curcloudcover`, `curhumidity`, `curpressure`, `curtemp`, `curweathercode`, `precipitationmm`, `date`, `tempmaxF`, `tempminF`, `weathercode`) VALUES (NULL, CURRENT_TIMESTAMP, $zipCode, NULL, NULL, NULL, NULL, NULL, $rainMM, $date, NULL, NULL, NULL)";
 	mysql_query($sqlWeather,$link) or die(mysql_error());
 }
 
@@ -48,6 +62,9 @@ $SQLPastRainfall = "select sum(`precipitationmm`) as RAINFALL from `WeatherData`
 $SQLResult = mysql_query($SQLRainfall,$link) or die(mysql_error());
 $row = mysql_fetch_array($SQLResult);
 $PastRainfall = $row['RAINFALL'];
+
+// need to add duration
+$SQLWateredInches = "select sum(abs(TIMESTAMPDIFF(SECOND,`EndTime`,`StartTime`)))/3600 as WATERHOURS from `ZoneWateringSchedule`  where `DeviceID` = 234234 and EndTime between (now() - interval 5 DAY) and now()";
 
 
 // find last time watered
@@ -65,7 +82,7 @@ $ScheduleWatering = $row['SCHEDULEWATER'];
 $waitDays = 4;
 $mmRainWater = 5;
 $XDaysAgo = date( "Y-m-d" ,strtotime(date("Y-m-d ", time()) . " - " . $waitDays . " Day"));
-
+// 1 in is 25.4 mm
 
 if($LastDayWatered < $XDaysAgo && empty($ScheduleWatering)) {
 	echo "Watered: ". $LastDayWatered. " We will water because its been ".$waitDays." days";

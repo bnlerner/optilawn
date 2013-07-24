@@ -29,6 +29,9 @@ if(mysql_num_rows($results) > 0){
 	}
 	elseif($array['result']){
 		echo "{0,9}"; /// to reset {0,9}
+		$insert = "0,9";
+		$sql_insertquery = "Insert into Device_Requests (DeviceID,response) Values($deviceCode,'$insert')";
+		mysql_query($sql_insertquery,$link) or die(mysql_error());
 	}
 	else{
 		echo "{0,0}"; /// to reset {0,9}

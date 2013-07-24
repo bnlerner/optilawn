@@ -1,7 +1,9 @@
 <?php
 
-include_once "header.php";
+
 include_once 'dbc.php';
+page_protect();
+include_once "header.php";
 
  //if($_SESSION['user_id'] != NULL){
 //	echo $_SESSION['user_id'];

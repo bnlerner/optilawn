@@ -34,4 +34,28 @@ function getWeather($location){
 	return $weather;
 }
 
+
+
+// api key 8b3ffefb18c36cdc
+// format
+// http://api.wunderground.com/api/KEY/history_YYYYMMDD/q/ST/CITY.json
+function getPastWeather($location,$state, $day){
+	//echo "getting past weather";
+	$query = "http://api.wunderground.com/api/8b3ffefb18c36cdc/history_".$day."/q/".$state."/".$location.".json";
+    //echo "</br>";
+	//echo $query;
+	//echo "</br>";
+	
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $query);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	$result = curl_exec($ch);
+	curl_close($ch);
+	$weather =  json_decode($result);
+    //$temp_f = $parsed_json->{'current_observation'}->{'temp_f'};
+    //echo "Current temperature in ${location} is: ${temp_f}\n";
+	
+	return $weather;
+}
+
 ?>
