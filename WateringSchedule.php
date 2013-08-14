@@ -3,6 +3,8 @@
 include_once 'dbc.php';
 
 $deviceCode = (is_null($_GET['deviceCode']) ? 'null' : $_GET['deviceCode']);
+$previousResponse = (is_null($_GET['previousResponse']) ? 'null' : $_GET['previousResponse']);
+$availableRam = (is_null($_GET['availableRam']) ? 'null' : $_GET['availableRam']);
 
 
 //$timezone = date_default_timezone_get();
@@ -23,20 +25,20 @@ if(mysql_num_rows($results) > 0){
 	$row = mysql_fetch_array($results);
 	$zone = $row['ZoneNumber'];
 	echo "{".$zone.",1}";
-	$insert = "$zone,1";
-	$sql_insertquery = "Insert into Device_Requests (DeviceID,response) Values($deviceCode,'$insert')";
+	//$insert = "$zone,1";
+	$sql_insertquery = "Insert into Device_Requests (DeviceID,response,availableRam) Values($deviceCode,'$previousResponse','$availableRam')";
 	mysql_query($sql_insertquery,$link) or die(mysql_error());
 	}
 	elseif($array['result']){
 		echo "{0,9}"; /// to reset {0,9}
 		$insert = "0,9";
-		$sql_insertquery = "Insert into Device_Requests (DeviceID,response) Values($deviceCode,'$insert')";
+		$sql_insertquery = "Insert into Device_Requests (DeviceID,response,availableRam) Values($deviceCode,'$insert','$availableRam')";
 		mysql_query($sql_insertquery,$link) or die(mysql_error());
 	}
 	else{
 		echo "{0,0}"; /// to reset {0,9}
 		$insert = "0,0";
-		$sql_insertquery = "Insert into Device_Requests (DeviceID,response) Values($deviceCode,'$insert')";
+		$sql_insertquery = "Insert into Device_Requests (DeviceID,response,availableRam) Values($deviceCode,'$insert','$availableRam')";
 		mysql_query($sql_insertquery,$link) or die(mysql_error());
 	}
 

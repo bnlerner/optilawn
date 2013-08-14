@@ -10,6 +10,7 @@ $timePerZone = 10;
 $TimeToWater = "06:30:00";
 $NumberOfZones = 5;
 $waitDays = 5;
+$user = "triley10";
 
 
 // clear future predictions
@@ -56,13 +57,19 @@ for ($i=1; $i<=7; $i++) {
 	$SQLResult = mysql_query($sqlWeatherDataCheck,$link) or die(mysql_error());
 	$row = mysql_fetch_array($SQLResult);
 	$CheckResponse = $row['RESPONSE'];
+	
 	if(is_null($CheckResponse)) {
 		$weather = getPastWeather($location,$state,$day);
 		foreach($weather->history->dailysummary as $curobj){
 			$rainIN = $curobj->precipi;
-			$rainMM = $curobj->precipm;
+			$rainMM = $curobj->precipm; // returning T for some reason
+			var_dump($rainMM);
+			if (!is_numeric($rainMM)) {
+				$rainMM = "NULL";
+			}
 			
 			$sqlWeather = "INSERT INTO `WeatherData` (`id`, `Date_Time_Stamp`, `zipcode`,`QueryType`, `curcloudcover`, `curhumidity`, `curpressure`, `curtemp`, `curweathercode`, `precipitationmm`, `date`, `tempmaxF`, `tempminF`, `weathercode`) VALUES (NULL, CURRENT_TIMESTAMP, $zipCode,'H', NULL, NULL, NULL, NULL, NULL, $rainMM, '$date', NULL, NULL, NULL)";
+			
 			mysql_query($sqlWeather,$link) or die(mysql_error());
 			//echo $sqlWeather;
 			//echo "</br>";
@@ -100,6 +107,26 @@ $row = mysql_fetch_array($SQLResult);
 $PastRainfall = $row['RAINFALL']; // in mm
 $PastRainfall = $PastRainfall/25.4; // in in
 
+
+
+/* --------------FIGURE OUT WHAT TO DO WITH THIS ------------------------
+
+// obtain soil type, calculate inches penetrated
+$SQLSoilprate = "select (`Water_infiltration_rate_MAX_IN_HR`+`Water_infiltration_rate_MIN_IN_HR`)/2 as AVGRate from `Soil_Penetration_Rate` where `Soil_Type` = (select soil from users where user_name = '$user')";
+$SQLResult = mysql_query($SQLSoilprate,$link) or die(mysql_error());
+$row = mysql_fetch_array($SQLResult);
+$waterRemain=$row['AVGRate'];
+
+//water needed in inches
+$sqlGrassneed= "select ‘WaterNeedPerWeek’ as WaterReqd from ‘Grass’ where ‘grass Type’ = (select grass as GrassType from users where users= '$user')";
+$SQLResult = mysql_query($sqlGrassneed,$link) or die(mysql_error());
+$row = mysql_fetch_array($SQLResult);
+$waterNeed=$row['WaterReqd'];
+$NetWater= $waterNeed-$waterRemain;
+
+
+*/
+
 // need to add duration finding inches watered
 $SQLWateredInches = "select sum(abs(TIMESTAMPDIFF(SECOND,`EndTime`,`StartTime`)))/3600 as WATERHOURS from `ZoneWateringSchedule`  where `DeviceID` = $deviceCode and EndTime between (now() - interval $pastdayInterval DAY) and now()";
 $SQLResult = mysql_query($SQLWateredInches,$link) or die(mysql_error());
@@ -111,8 +138,6 @@ $avgLawnSize =  3000*144; // american average 4900*144; //sq inches
 $inchesWatered = ($avgGPH*231*$PastWater)/($avgLawnSize); //watered in inches 
 
 $TotalCurrentGrassWater = $PastRainfall + $inchesWatered;
-
-
 
 // find recommended water for grass 
 $SQLRecWaterInPerWeek = "select Summer_min_Water_in_month AS WATER from Grass where grassType = (select grass from users where serial = $deviceCode)";

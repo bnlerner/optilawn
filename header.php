@@ -67,10 +67,12 @@ if (@$_POST['doLogin']=='Login')
 		else{
 			//$msg = urlencode("Invalid Login. Please try again with correct user email and password. ");
 			$err[] = "Invalid Login. Please try again with correct user email and password.";
+			sleep(3);
 			//header("Location: failed.php?msg=$msg");
 		}
 	} 
 	else {
+		sleep(3);
 		$err[] = "Error - Invalid login. No such user exists";
 	}		
 }
