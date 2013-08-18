@@ -68,7 +68,7 @@ for ($i=1; $i<=7; $i++) {
 				$rainMM = "NULL";
 			}
 			
-			$sqlWeather = "INSERT INTO `WeatherData` (`id`, `Date_Time_Stamp`, `zipcode`,`QueryType`, `curcloudcover`, `curhumidity`, `curpressure`, `curtemp`, `curweathercode`, `precipitationmm`, `date`, `tempmaxF`, `tempminF`, `weathercode`) VALUES (NULL, CURRENT_TIMESTAMP, $zipCode,'H', NULL, NULL, NULL, NULL, NULL, $rainMM, '$date', NULL, NULL, NULL)";
+			$sqlWeather = "INSERT INTO `WeatherData` (`id`, `Date_Time_Stamp`, `zipcode`,`QueryType`, `curcloudcover`, `curhumidity`, `curpressure`, `curtemp`, `curweathercode`, `precipitationmm`,`precipitationIN`, `date`, `tempmaxF`, `tempminF`, `weathercode`) VALUES (NULL, CURRENT_TIMESTAMP, $zipCode,'H', NULL, NULL, NULL, NULL, NULL, $rainMM,$rainMM/25.4, '$date', NULL, NULL, NULL)";
 			
 			mysql_query($sqlWeather,$link) or die(mysql_error());
 			//echo $sqlWeather;
@@ -102,11 +102,10 @@ $futRainfall = $futRainfall/25.4; // in in
 // find past rainfall
 $pastdayInterval = 7; // find 1 week prior
 $SQLPastRainfall = "select sum(`precipitationmm`) as RAINFALL from `WeatherData`  where `precipitationmm` IS NOT NULL and QueryType = 'H' and `zipcode` = $zipCode and `date` between (curdate() - interval $pastdayInterval day) and curdate()";
-$SQLResult = mysql_query($SQLRainfall,$link) or die(mysql_error());
+$SQLResult = mysql_query($SQLPastRainfall,$link) or die(mysql_error());
 $row = mysql_fetch_array($SQLResult);
 $PastRainfall = $row['RAINFALL']; // in mm
 $PastRainfall = $PastRainfall/25.4; // in in
-
 
 
 /* --------------FIGURE OUT WHAT TO DO WITH THIS ------------------------
@@ -140,6 +139,7 @@ $inchesWatered = ($avgGPH*231*$PastWater)/($avgLawnSize); //watered in inches
 $TotalCurrentGrassWater = $PastRainfall + $inchesWatered;
 
 // find recommended water for grass 
+
 $SQLRecWaterInPerWeek = "select Summer_min_Water_in_month AS WATER from Grass where grassType = (select grass from users where serial = $deviceCode)";
 $SQLResult = mysql_query($SQLRecWaterInPerWeek,$link) or die(mysql_error());
 $row = mysql_fetch_array($SQLResult);
