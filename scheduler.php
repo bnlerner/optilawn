@@ -31,6 +31,7 @@ foreach($weather->data->current_condition as $curobj) {
 $sqlCurWeather = "INSERT INTO `WeatherData` (`id`, `Date_Time_Stamp`, `zipcode`, `curcloudcover`, `curhumidity`, `curpressure`, `curtemp`, `curweathercode`, `precipitationmm`, `date`, `tempmaxF`, `tempminF`, `weathercode`) VALUES (NULL, CURRENT_TIMESTAMP, $zipCode, $Curcloudcover, $CurHumidity, $CurPressure, $CurTempF, $CurWeatherCode, NULL, CURDATE(), NULL, NULL, NULL)";
 mysql_query($sqlCurWeather,$link) or die(mysql_error());
 */
+
 foreach($weather->data->weather as $obj) {
 	$Date = $obj->date;
 	$precipitation = $obj->precipMM;
@@ -63,12 +64,14 @@ for ($i=1; $i<=7; $i++) {
 		foreach($weather->history->dailysummary as $curobj){
 			$rainIN = $curobj->precipi;
 			$rainMM = $curobj->precipm; // returning T for some reason
+			$rainIN = $rainMM/25.4;
 			var_dump($rainMM);
 			if (!is_numeric($rainMM)) {
 				$rainMM = "NULL";
+				$rainIN = "NULL";
 			}
 			
-			$sqlWeather = "INSERT INTO `WeatherData` (`id`, `Date_Time_Stamp`, `zipcode`,`QueryType`, `curcloudcover`, `curhumidity`, `curpressure`, `curtemp`, `curweathercode`, `precipitationmm`,`precipitationIN`, `date`, `tempmaxF`, `tempminF`, `weathercode`) VALUES (NULL, CURRENT_TIMESTAMP, $zipCode,'H', NULL, NULL, NULL, NULL, NULL, $rainMM,$rainMM/25.4, '$date', NULL, NULL, NULL)";
+			$sqlWeather = "INSERT INTO `WeatherData` (`id`, `Date_Time_Stamp`, `zipcode`,`QueryType`, `curcloudcover`, `curhumidity`, `curpressure`, `curtemp`, `curweathercode`, `precipitationmm`,`precipitationIN`, `date`, `tempmaxF`, `tempminF`, `weathercode`) VALUES (NULL, CURRENT_TIMESTAMP, $zipCode,'H', NULL, NULL, NULL, NULL, NULL, $rainMM, $rainIN, '$date', NULL, NULL, NULL)";
 			
 			mysql_query($sqlWeather,$link) or die(mysql_error());
 			//echo $sqlWeather;
